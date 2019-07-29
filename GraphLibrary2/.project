@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>GraphLibrary2</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>de.tu_bs.cs.isf.deltaj.resource.deltaj.builder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.deltaecore.suite.mapping.resource.demapping.builder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.deltaecore.core.decore.resource.decore.builder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>de.tu_bs.cs.isf.deltaj.resource.deltaj.nature</nature>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+		<nature>org.deltaecore.suite.mapping.resource.demapping.nature</nature>
+		<nature>org.deltaecore.core.decore.resource.decore.nature</nature>
+	</natures>
+</projectDescription>

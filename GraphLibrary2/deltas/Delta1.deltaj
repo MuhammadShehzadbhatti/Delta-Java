@@ -1,0 +1,533 @@
+delta Delta1 {
+
+	modifies GPL.Graph{
+
+		adds public boolean isDirected=false;
+
+		adds public String name="";
+
+		adds import java.util.LinkedList;
+
+		adds import java.util.Collections;
+
+		adds import java.util.Iterator;
+
+		adds import java.util.Comparator;
+
+		adds LinkedList nodeList;
+
+		adds LinkedList edgeList;
+
+		adds public Graph(){
+
+			nodeList=new LinkedList();
+
+			edgeList=new LinkedList();
+			//Node node=new Node(name);
+			//System.out.println("New added method from delta by editing core ");
+
+		}
+
+		adds public void sortEdges(Comparator c) {
+
+	        Collections.sort(edgeList, c);
+
+	    } 
+
+		adds public void sortNodes(Comparator c) {
+
+		    Collections.sort(nodeList, c);
+
+		}
+
+		adds public void addNode(Node node){
+
+			nodeList.add(node);
+
+		}
+
+		adds public static void main(String[] args){
+
+			Graph graph=new Graph();
+
+			graph.addNode(new Node("A"));
+
+		}
+	
+		adds public NodeItr getNode(){
+	
+			return new NodeItr(this);
+	
+		} 
+	
+		adds EdgeInterface addEdge( Node start, Node end ) {
+	
+			Edge edge=new Edge();
+	
+			edge.theEdge(start, end);
+	
+			edgeList.add(edge); 
+	
+			start.addNeighbor(new Neighbor(end, edge));
+	
+			end.addNeighbor(new Neighbor(start, edge));
+	
+			display();
+	
+			return edge;
+	
+		} 
+	
+		adds EdgeInterface addEdge( Node start, Node end ,int weight) {
+	
+			Edge edge=new Edge();
+	
+			edge.theEdge(start, end, weight);
+	
+			edgeList.add(edge); 
+	
+			start.addNeighbor(new Neighbor(end, edge));
+	
+			end.addNeighbor(new Neighbor(start, edge));
+	
+			display();
+	
+			return edge;
+	
+		}
+	
+		adds public  EdgeInterface findsEdge( Node srcNode,Node trgtNode ){
+	
+			EdgeInterface edge;
+	
+			for( EdgeItr edgeitr = srcNode.getEdges(); edgeitr.hasNext(); ){
+	
+				edge = edgeitr.next();
+	
+				if ( ( edge.getStartNode().getName().equals( srcNode.getName() ) &&
+	
+				edge.getEndNode().getName().equals( trgtNode.getName() ) ) ||
+	
+				( edge.getStartNode().getName().equals( trgtNode.getName() ) &&
+	
+				edge.getEndNode().getName().equals( srcNode.getName() ) ) )
+	
+					return edge;
+	
+			}
+	
+			return null;
+	
+		}
+	
+		adds public void display() {
+	
+			System.out.println( "Undirected Nodes " );
+	
+			for ( NodeItr nodeiter = getNode(); nodeiter.hasNext() ; )
+	
+				nodeiter.next().display();
+	
+			System.out.println( "Undirected Edges " );
+	
+			for ( EdgeItr edgeiter = getEdges(); edgeiter.hasNext(); )
+	
+					edgeiter.next().display();
+	
+		}
+	
+		adds public EdgeItr getEdges() {
+	
+	        return new EdgeItr() {
+	
+	            private Iterator iter = edgeList.iterator();
+	
+	            public EdgeInterface next() { return (EdgeInterface)iter.next(); }
+	
+	            public boolean hasNext() { return iter.hasNext(); }
+	
+	        };
+	
+	    }
+	
+	    adds Node findsNode( String nodeName ){
+	
+			Node node=null;
+	
+	
+			for (NodeItr nodeItr=getNode();nodeItr.hasNext();) {
+	
+				node=nodeItr.next();
+	
+				if (node.getName()==nodeName) {
+	
+					return node;
+	
+				}
+	
+			}
+	
+			return node;
+	
+		}
+	
+	}
+	
+	adds{
+	
+		package GPL;
+	
+		import java.util.Iterator;
+	
+		import java.util.LinkedList;
+	
+		public class Node{
+	
+		public boolean visited = false;
+	
+			public LinkedList neighbors = new LinkedList();
+	
+			String name=null;;
+	
+			Node(String name){
+	
+				this.name=name;
+	
+			}
+
+			public Node setName( String name ) {
+
+			    this.name = name;
+
+			    return ( Node ) this;
+
+			}
+
+			public String getName( ) {  
+
+				return this.name;
+
+			}	
+			
+			public LinkedList getNodeNeighbors( ){
+		    
+		      return neighbors;
+		    
+		    }
+			
+			public NodeItr getNeighbors( ){
+		    
+		        return new NodeItr( ){
+		    
+		            private Iterator iter =  neighbors.iterator( );
+		    
+		            //NEED TO Add again temporarely comented start
+		    
+		            public Node next( ) {
+		    
+		              return ( ( Neighbor )iter.next( ) ).getEndNode();
+		    
+		            } 
+		    
+		            //NEED TO Add again temporarely comented end
+		    
+		            public boolean hasNext( ){
+		    
+		              return iter.hasNext( );
+		    
+		            }
+		    
+		        };
+		    
+		    }
+		    
+		    public void addNeighbor( Neighbor nbr ) {
+		    
+		        neighbors.add( nbr );
+		    
+		    } 
+		    
+		    public EdgeItr getEdges(){
+		    
+		        return new EdgeItr(){
+		    
+		            private Iterator iter = neighbors.iterator();
+		    
+		            //NEED TO Add again temporarely comented start
+		    
+		            public EdgeInterface next( ){
+		    
+		              return ( ( EdgeInterface ) ( ( Neighbor ) iter.next( ) ).getEdge() );
+		    
+		            }
+		    
+		            //NEED TO Add again temporarely comented end
+		    
+		            public boolean hasNext() { return iter.hasNext(); }
+		    
+		        };
+		    
+		    }
+		    
+		    public void display() {
+		    
+		        System.out.print( " Node " + name + " connected to: " );
+		
+		
+		
+		        for(NodeItr nodeitr = getNeighbors(); nodeitr.hasNext(); ){
+		
+		            Node node = nodeitr.next();
+		
+		            System.out.print( node.getName() + ", " ); 
+		
+		        }
+		
+		        System.out.println();
+		
+		    }
+		
+		}
+	
+	}
+	
+	adds{
+	
+		package GPL;
+	
+		import java.util.Iterator;
+	
+		public class NodeItr{
+	
+			private Iterator itr;
+	
+			NodeItr(){
+	
+			}
+	
+			NodeItr(Graph g) { 
+	
+				 itr = g.nodeList.iterator();
+	
+			}
+	
+		public Node next() {
+	
+			return (Node)itr.next();
+	
+	    }
+	
+	    public boolean hasNext() { 
+	
+		   return itr.hasNext(); 
+	
+	    } 
+	
+		}
+	
+	}
+	
+	adds{
+	
+		package GPL;
+	
+		public interface EdgeInterface {
+	
+			public Node getStartNode();
+	
+			public Node getEndNode();
+	
+		    public void display( );
+	
+		    public int getWeight();
+	
+		
+	
+		    public Node getOtherNode( Node node );
+	
+		    public void adjustAdorns( EdgeInterface theEdge );
+	
+			
+	
+		}
+	
+	}
+	
+	adds{
+	
+		package GPL;
+	
+		public class EdgeItr {
+	
+			public boolean hasNext() {
+	
+				return false ;
+	
+			}
+	
+			public EdgeInterface  next() {
+
+				return null;
+
+			}
+
+		}		
+
+	}
+
+	adds{
+
+		package GPL;
+
+		import java.util.LinkedList;
+
+		public class Neighbor implements NeighborInterface{
+
+		 	//implements NeighborInterface
+
+			public  Node end;
+
+		    public  Edge edge;
+
+		    public Neighbor() {
+
+		        end = null;
+
+		        edge = null;
+
+		    }
+
+		    public Neighbor( Node endNode,  Edge edge ) {
+
+		        this.end = endNode;
+
+		        this.edge = edge;
+
+		    }
+
+		    public Edge getEdge(){
+
+		    	return edge;
+
+		    }
+
+		    public Node getEndNode(){
+
+		    	return end;
+
+		    }
+
+		}
+
+	}
+
+	adds{
+
+		package GPL;
+
+		import java.util.LinkedList;
+
+		import java.util.Iterator;
+
+		public class Edge extends Neighbor implements EdgeInterface{
+
+
+			public Node start,end=null;
+
+			public void theEdge(Node startNode, Node endNode){
+
+				start=startNode;
+
+				end=endNode;
+
+			}
+
+			public void theEdge(Node startNode, Node endNode,int weight){
+
+		//		start=null;
+
+		//		end=null;
+
+			}
+
+			public Node getStart(){
+
+				return this.start;
+
+			}
+
+			public Node getEnd(){
+
+				return this.end;
+
+			}
+
+			public void display( ){
+
+				 System.out.println( "start Node = " + getStartNode().getName() + " end Node = " + getEndNode().getName() );
+
+			}
+
+			public void setWeight(int weight){
+
+				
+
+			}
+
+		    public int getWeight(){ 
+
+		    	return 0; 
+
+		    }
+
+		    public Node getOtherNode( Node node ) {
+
+		    	 if(node == start)
+
+		             return end;
+
+		         else if(node == end)
+
+		             return start;
+
+		         else
+
+		             return null;
+
+		    }
+
+		    public Node getStartNode( ){
+
+		        return start;
+
+		    }
+
+		    public Node getEndNode( ){
+
+		        return end;
+
+		    }
+
+		    public void adjustAdorns( EdgeInterface theEdge ) {
+
+		    }
+
+		}
+
+	}
+
+	adds{
+
+		package GPL;
+
+		import java.util.LinkedList;
+
+		public interface NeighborInterface {
+
+			//CONTENT
+
+		}		
+
+	}
+
+}

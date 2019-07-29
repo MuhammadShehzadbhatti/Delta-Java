@@ -1,0 +1,24 @@
+delta Weighted requires Directed, Delta1{
+	modifies GPL.Edge{
+		adds int weight;
+		modifies theEdge( Node start,  Node end, int weight ) {
+			theEdge( start,end );
+		    this.weight = weight;
+		}
+		modifies adjustAdorns( EdgeInterface edge ) {
+			setWeight(edge.getWeight());
+	        original( edge );
+			adjustAdorns( edge );
+		}
+		modifies setWeight(int weight){
+	        this.weight = weight;
+	    }
+	    modifies getWeight(){
+	        return this.weight;
+	    }
+	    modifies display() {
+	        System.out.print( " Weight= " + getWeight() +" ");
+	        original();
+	    }
+	}
+}
