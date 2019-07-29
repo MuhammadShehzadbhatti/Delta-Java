@@ -1,0 +1,176 @@
+delta Directed requires Delta1{
+	modifies GPL.Graph{
+		//adds import java.util.LinkedList;
+		removes isDirected;
+	//	adds public boolean isDirected = true;
+		//modifies isDirected;
+		//adds public LinkedList edgeList;
+		//modifies constructor(){
+		//	edgeList=new LinkedList();
+		//} 
+		//modifies sortEdges(Comparator c) {
+	      //  Collections.sort(edgeList, c);
+	        //this is  in Directed
+	    //}
+	    
+		modifies addEdge(Node start,Node end,int weight) {
+			Edge edge=new Edge();
+			edge.theEdge(start, end, weight);
+			edgeList.add(edge);
+			//edgeList.add(edge); 
+			start.addNeighbor(new Neighbor(end, edge));
+			display();
+	        //this is  in Directed
+			return edge;
+		}
+		
+		modifies addEdge(Node start,Node end) {
+			Edge edge=new Edge();
+			edge.theEdge(start, end);
+			edgeList.add(edge);
+			//edgeList.add(edge); 
+			start.addNeighbor(new Neighbor(end, edge));
+			display();
+	        //this is  in Directed modified
+			return edge;
+		}
+		
+		modifies findsNode(String nodeName) {
+			Node node=null;
+			for (NodeItr nodeItr=getNode();nodeItr.hasNext();) {
+				node=nodeItr.next();
+				if (node.getName()==nodeName) {
+					return node;
+	        //this is  in Directed
+				}
+			}
+			return null; 
+		}
+		
+		modifies getEdges() {
+	        //this is  in Directed
+			return new EdgeItr() {
+			    private Iterator iter = edgeList.iterator();
+				public EdgeInterface next() { return (EdgeInterface)iter.next(); }
+				public boolean hasNext() { return iter.hasNext(); }
+		    };
+		}
+	
+		modifies display() { 
+	        //this is  in Directed
+		//		    	 int i;
+			System.out.println( "--Directed Graph Nodes--" );
+			System.out.println( "Nodes " );
+			for ( NodeItr nodeiter = getNode(); nodeiter.hasNext() ; )
+				nodeiter.next().display();
+			System.out.println( "--Directed Graph Edge--" );
+			System.out.println( "Edges " );
+			for ( EdgeItr edgeiter = getEdges(); edgeiter.hasNext(); )
+				edgeiter.next().display();
+		}
+	}
+	
+	modifies GPL.Node{
+	        //this is  in Directed
+		    modifies setName( String name ) {
+			    this.name = name;
+			    return ( Node ) this; 
+			}
+			
+			modifies getName( ) {  
+				return this.name;
+			}
+			
+		    modifies addNeighbor( Neighbor nbr ) {
+		    	neighbors.add(nbr);
+		    }
+		     
+		    modifies getNeighbors() {
+		    	return new NodeItr() {
+		            private Iterator iter = neighbors.iterator();
+		            public Node next() { return ((Neighbor)iter.next()).getEndNode(); }
+		            public boolean hasNext() { return iter.hasNext(); }
+		        };
+		    }
+		    
+		    modifies getEdges(){
+		        return new EdgeItr(){
+	                private Iterator iter = neighbors.iterator();
+	                public EdgeInterface next( )
+	                {
+	                  return ( ( EdgeInterface ) ( ( Neighbor ) iter.next( ) ).getEdge() );
+	                }
+	                public boolean hasNext() { return iter.hasNext(); }
+	            };
+		    }
+		    
+		    modifies display() {
+		        System.out.print( " Node " + getName() + " connected to: " );
+		        for(NodeItr nodeitr = getNeighbors(); nodeitr.hasNext(); ){
+		            Node node = nodeitr.next();
+		            System.out.print( node.getName() + ", " ); 
+		        }
+		        System.out.println();
+		    }
+		    
+		    modifies display() {
+		        System.out.print( " Node " + getName() + " connected to: " );
+		        for(NodeItr nodeitr = getNeighbors(); nodeitr.hasNext(); )
+		         {
+		            Node node = nodeitr.next();
+		            System.out.print( node.getName() + ", " ); 
+		        }
+		        System.out.println();
+		    }
+	
+	}
+	modifies GPL.Edge{
+	
+		modifies theEdge(Node startNode, Node endNode){
+			start=startNode;
+			end=endNode;
+		}
+	//	Override
+	
+		modifies theEdge(Node startNode, Node endNode,int weight){
+		}
+	
+		modifies getStartNode() {
+			return this.start;
+		}
+	
+		modifies getEndNode() {
+			return this.end;
+		}
+	
+		modifies display( ) {
+			 System.out.println( "start Node = " + start.getName() + " end Node = " + end.getName() );
+		}
+	
+		modifies setWeight(int weight){}
+	
+	    modifies getWeight() { return 0; }
+	
+	    modifies getOtherNode( Node node ) {
+	
+	    	 if(node == start)
+	
+	             return end;
+	
+	         else if(node == end)
+	
+	             return start;
+	
+	         else
+	
+	             return null;
+	
+	    }
+	
+	    modifies adjustAdorns( EdgeInterface theEdge ) {
+	
+	    	
+	    }
+	
+	}
+}

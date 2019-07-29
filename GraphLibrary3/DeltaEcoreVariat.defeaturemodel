@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="ASCII"?>
+<feature:DEFeatureModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:feature="http://deltaecore.org/feature/1.0">
+  <rootFeature minCardinality="1" maxCardinality="1" name="GraphLibrary">
+    <groups minCardinality="2" maxCardinality="2">
+      <features minCardinality="1" maxCardinality="1" name="Node">
+        <groups minCardinality="1" maxCardinality="1">
+          <features minCardinality="1" maxCardinality="1" name="Position"/>
+        </groups>
+      </features>
+      <features minCardinality="1" maxCardinality="1" name="Edge">
+        <groups maxCardinality="2">
+          <features maxCardinality="1" name="Directed"/>
+          <features maxCardinality="1" name="Weighted"/>
+        </groups>
+      </features>
+    </groups>
+  </rootFeature>
+</feature:DEFeatureModel>
