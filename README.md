@@ -1,4 +1,4 @@
- Delta-Java
+Delta-Java
 Program variants Generation Delta Ecor and Delta Java. By following the rules of Delta Oriented Programming in order to acheive Software Product Line (SPL).
 - Delta Ecore, Delta Java
 - Feature Oriented Sowafter Developmnent (FOSD)
